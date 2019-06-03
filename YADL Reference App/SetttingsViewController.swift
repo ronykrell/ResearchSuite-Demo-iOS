@@ -26,12 +26,13 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     var store: RSStore!
     
-    var items: [String] = ["Take Full Assessment", "Take Spot Assessment","Take PAM Assessment","Take Demographics Survey","Set Notification Time", "Go No Go", "Sign Out"]
+    var items: [String] = ["Take Full Assessment", "Take Spot Assessment","Take PAM Assessment","Take Demographics Survey","Set Notification Time", "Go No Go", "Take Location Survey", "Sign Out"]
     var fullAssessmentItem: RSAFScheduleItem!
     var spotAssessmentItem: RSAFScheduleItem!
     var notificationItem: RSAFScheduleItem!
     var pamAssessmentItem: RSAFScheduleItem!
     var demographicsAssessmentItem: RSAFScheduleItem!
+    var locationItem: RSAFScheduleItem!
     let delegate = UIApplication.shared.delegate as! AppDelegate
     
     override func viewDidLoad() {
@@ -127,9 +128,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         if indexPath.row == 5 {
             self.launchGoNoGo()
         }
-        
-        
         if indexPath.row == 6 {
+            self.launchLocationAssessment()
+        }
+        
+        if indexPath.row == 7 {
             self.signOut()
         }
         
@@ -154,6 +157,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     func launchPamAssessment() {
         self.pamAssessmentItem = AppDelegate.loadScheduleItem(filename: "pam.json")
         self.launchActivity(forItem: pamAssessmentItem)
+    }
+    
+    func launchLocationAssessment(){
+        self.locationItem = AppDelegate.loadScheduleItem(filename: "LocationSurvey.json")
+        self.launchActivity(forItem: locationItem)
     }
     
     func launchDemographicsSurvey() {
@@ -200,6 +208,19 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     
                     let resultAnswer = timeAnswer?.dateComponentsAnswer
                     self?.setNotification(resultAnswer: resultAnswer!)
+                    DispatchQueue.main.async{
+                        self?.tableView.reloadData()
+                    }
+                    
+                }
+                
+                if(item.identifier == "location_survey"){
+                    
+                    let result = taskResult.stepResult(forStepIdentifier: "home_location_step")
+                    let locationAnswer = result?.firstResult as? ORKLocationQuestionResult
+                    
+//                    let resultAnswer = locationAnswer?.
+                    self?.setLocation(resultAnswer: locationAnswer!)
                     DispatchQueue.main.async{
                         self?.tableView.reloadData()
                     }
@@ -400,6 +421,39 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         }
         
         
+    }
+    
+    func setLocation(resultAnswer: ORKLocationQuestionResult) {
+        let lat = resultAnswer.locationAnswer?.coordinate.latitude
+        let long = resultAnswer.locationAnswer?.coordinate.longitude
+       
+        delegate.store.setValueInState(value: String(describing:lat!) as NSSecureCoding, forKey: "locationLatitude")
+        delegate.store.setValueInState(value: String(describing:long!) as NSSecureCoding, forKey: "locationLongitude")
+
+        let center = CLLocationCoordinate2D(latitude: lat ?? 0.0, longitude: long ?? 0.0)
+        let region = CLCircularRegion(center: center, radius: 2000.0, identifier: "Home_Location")
+        region.notifyOnEntry = true
+        region.notifyOnExit = true
+        let locationManager = CLLocationManager()
+        locationManager.startMonitoring(for: region)
+
+        let content = UNMutableNotificationContent()
+        content.title = "ResearchSuite"
+        content.body = "It's time to complete your Location Task"
+        content.sound = UNNotificationSound.default()
+        
+        let trigger = UNLocationNotificationTrigger(region: region, repeats: false)
+
+        let identifier = "UYLLocalNotification"
+        let request = UNNotificationRequest(identifier: identifier,
+                                            content: content, trigger: trigger)
+
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        appDelegate?.center.add(request, withCompletionHandler: { (error) in
+            if let error = error {
+                // Something went wrong
+            }
+        })
     }
 
     

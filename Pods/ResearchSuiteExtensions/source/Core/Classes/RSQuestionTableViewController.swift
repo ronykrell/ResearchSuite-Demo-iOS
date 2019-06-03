@@ -9,10 +9,14 @@
 import UIKit
 import ResearchKit
 
-open class RSQuestionTableViewController: ORKStepViewController, UITableViewDataSource, UITableViewDelegate {
+public protocol RSQuestionTableViewControllerAdaptor: UITableViewDataSource, UITableViewDelegate {
+    func configure(tableView: UITableView)
+}
+
+open class RSQuestionTableViewController: ORKStepViewController, RSQuestionTableViewControllerAdaptor {
+    
 //, UITableViewDataSource, UITableViewDelegate {
 
-    
     @IBOutlet public weak var titleLabel: UILabel!
     @IBOutlet public weak var textLabel: UILabel!
     @IBOutlet weak var topPaddingView: UIView!
@@ -28,6 +32,7 @@ open class RSQuestionTableViewController: ORKStepViewController, UITableViewData
     
     var tableViewStep: RSQuestionTableViewStep?
     var border: CALayer?
+    open var adaptor: RSQuestionTableViewControllerAdaptor!
     
     open var skipped = false
     
@@ -42,6 +47,7 @@ open class RSQuestionTableViewController: ORKStepViewController, UITableViewData
         self.step = step
         self.restorationIdentifier = step!.identifier
         
+        self.adaptor = self.createAdaptor(viewController: self, step: step, result: result)
     }
     
     override open func viewDidLoad() {
@@ -77,8 +83,19 @@ open class RSQuestionTableViewController: ORKStepViewController, UITableViewData
 
         self.skipButton.isHidden = !step.isOptional
         
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
+        //hold this strongly
+        
+        self.tableView.dataSource = self.adaptor
+        self.tableView.delegate = self.adaptor
+        self.adaptor.configure(tableView: self.tableView)
+        
+    }
+    
+    open func createAdaptor(viewController: RSQuestionTableViewController, step: ORKStep?, result: ORKResult?) -> RSQuestionTableViewControllerAdaptor {
+        return self
+    }
+    
+    open func configure(tableView: UITableView) {
         
     }
     
@@ -137,8 +154,8 @@ open class RSQuestionTableViewController: ORKStepViewController, UITableViewData
             footer.layer.addSublayer(topBorder)
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
     }
 
@@ -149,8 +166,8 @@ open class RSQuestionTableViewController: ORKStepViewController, UITableViewData
     
     override open func viewDidDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     open func setSkipButtonTitle(title: String) {
@@ -170,14 +187,14 @@ open class RSQuestionTableViewController: ORKStepViewController, UITableViewData
     @objc open func keyboardWillShow(notification: NSNotification) {
         
         if let userInfo = notification.userInfo,
-            let duration = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue,
-            let curve = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.intValue,
-            let keyboardFrameEnd = userInfo[UIKeyboardFrameEndUserInfoKey] as? CGRect {
+            let duration = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue,
+            let curve = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.intValue,
+            let keyboardFrameEnd = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
 
             let internalKeyboardFrameEnd = self.view.convert(keyboardFrameEnd, from: nil)
-            let curveOption = UIViewAnimationOptions.init(rawValue: UInt(curve))
+            let curveOption = UIView.AnimationOptions.init(rawValue: UInt(curve))
 
-            UIView.animate(withDuration: duration, delay: 0, options: [UIViewAnimationOptions.beginFromCurrentState, curveOption], animations: {
+            UIView.animate(withDuration: duration, delay: 0, options: [UIView.AnimationOptions.beginFromCurrentState, curveOption], animations: {
                 
                 self.tableViewBottomConstraint.constant = internalKeyboardFrameEnd.size.height
                 self.view.layoutIfNeeded()
@@ -191,11 +208,11 @@ open class RSQuestionTableViewController: ORKStepViewController, UITableViewData
     
     @objc open func keyboardWillHide(notification: NSNotification) {
         if let userInfo = notification.userInfo,
-            let duration = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue,
-            let curve = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.intValue {
-            let curveOption = UIViewAnimationOptions.init(rawValue: UInt(curve))
+            let duration = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue,
+            let curve = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.intValue {
+            let curveOption = UIView.AnimationOptions.init(rawValue: UInt(curve))
             
-            UIView.animate(withDuration: duration, delay: 0, options: [UIViewAnimationOptions.beginFromCurrentState, curveOption], animations: {
+            UIView.animate(withDuration: duration, delay: 0, options: [UIView.AnimationOptions.beginFromCurrentState, curveOption], animations: {
                 
                 self.tableViewBottomConstraint.constant = 0
                 self.view.layoutIfNeeded()

@@ -63,7 +63,8 @@ open class RSEnhancedTextScaleStepGenerator: RSTBBaseStepGenerator, RSTBAnswerFo
             minValueLabel: helper.localizationHelper.localizedString(stepDescriptor.minimumValueLabel),
             maximumValueDescription: helper.localizationHelper.localizedString(stepDescriptor.maximumValueDescription),
             neutralValueDescription: helper.localizationHelper.localizedString(stepDescriptor.neutralValueDescription),
-            minimumValueDescription: helper.localizationHelper.localizedString(stepDescriptor.minimumValueDescription)
+            minimumValueDescription: helper.localizationHelper.localizedString(stepDescriptor.minimumValueDescription),
+            valueLabelHeight: stepDescriptor.valueLabelHeight
         )
         
         return answerFormat
@@ -77,7 +78,7 @@ open class RSEnhancedTextScaleStepGenerator: RSTBBaseStepGenerator, RSTBAnswerFo
         
         let identifier = "\(identifierPrefix).\(stepDescriptor.identifier)"
         
-        let step = RSEnhancedTextScaleStep(identifier: identifier, answerFormat: answerFormat)
+        let step = RSEnhancedTextScaleStep(identifier: identifier, answerFormat: answerFormat, autoAdvance: stepDescriptor.autoAdvance)
         step.title = helper.localizationHelper.localizedString(stepDescriptor.title)
         step.text = helper.localizationHelper.localizedString(stepDescriptor.text)
         

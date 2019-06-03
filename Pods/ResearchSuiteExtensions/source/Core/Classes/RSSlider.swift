@@ -11,17 +11,15 @@ import UIKit
 open class RSSlider: UISlider {
     
     static let LineWidth: CGFloat = 1.0
-    static let LineHeight: CGFloat = 8.0
+    static let LineHeight: CGFloat = 4.0
     
     func centerXForValue(value: Int, trackRect: CGRect) -> CGFloat? {
         
-        guard let numberOfSteps = self.numberOfSteps else {
-            return nil
-        }
+        let valueOffset = Float(value) - self.minimumValue
+        let maximumOffset = self.maximumValue - self.minimumValue
+        let offsetPercentage: CGFloat = CGFloat(valueOffset / maximumOffset)
         
-        let discreteOffset = Int(round(Float(value) - self.minimumValue))
-        
-        var x: CGFloat = trackRect.origin.x + (trackRect.size.width - RSSlider.LineWidth) * CGFloat(discreteOffset) / CGFloat(numberOfSteps)
+        var x: CGFloat = trackRect.origin.x + ((trackRect.size.width - RSSlider.LineWidth) * offsetPercentage)
         
         x = x + (RSSlider.LineWidth / 2)
         
@@ -44,7 +42,14 @@ open class RSSlider: UISlider {
         let minimumValue = Int(round(self.minimumValue))
         let maximumValue = Int(round(self.maximumValue))
         
-        (minimumValue...maximumValue).forEach { (value) in
+        //only mark values based on step size
+        assert( (maximumValue - minimumValue) % self.stepSize == 0)
+        let filteredRange = (minimumValue...maximumValue).filter { value in
+            let offset = value - minimumValue
+            return offset % self.stepSize == 0
+        }
+        
+        filteredRange.forEach { (value) in
             
             if let centerX = self.centerXForValue(value: value, trackRect: trackRect) {
                 path.move(to: CGPoint(x: centerX, y: centerY - RSSlider.LineHeight))
@@ -59,7 +64,7 @@ open class RSSlider: UISlider {
     }
     
     open var showThumb = false
-    open var numberOfSteps: Int?
+    open var stepSize: Int!
     
     open override func thumbRect(forBounds bounds: CGRect, trackRect rect: CGRect, value: Float) -> CGRect {
         
@@ -76,6 +81,11 @@ open class RSSlider: UISlider {
         }
         
         return thumbRect
+    }
+    
+    override open func trackRect(forBounds bounds: CGRect) -> CGRect {
+        let rect = super.trackRect(forBounds: bounds)
+        return CGRect(x: rect.origin.x, y: rect.origin.y, width: rect.size.width, height: 1)
     }
     
 }

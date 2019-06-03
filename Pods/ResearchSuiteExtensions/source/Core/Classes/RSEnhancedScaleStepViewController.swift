@@ -17,12 +17,10 @@ open class RSEnhancedScaleStepViewController: RSQuestionViewController {
         
         guard let scaleStep = self.step as? RSEnhancedScaleStep,
             let answerFormat = scaleStep.answerFormat as? RSEnhancedScaleAnswerFormat,
-            let sliderView = RSSliderView.newView(minimumValue: answerFormat.minimum, maximumValue: answerFormat.maximum) else {
+            let sliderView = RSSliderView.newView(minimumValue: answerFormat.minimum, maximumValue: answerFormat.maximum, stepSize: answerFormat.step) else {
             return
         }
         
-        
-
         sliderView.minValueLabel.text = answerFormat.minValueLabel
         sliderView.maxValueLabel.text = answerFormat.maxValueLabel
         sliderView.minValueDescriptionLabel.text = answerFormat.minimumValueDescription
@@ -31,12 +29,12 @@ open class RSEnhancedScaleStepViewController: RSQuestionViewController {
         
         sliderView.textLabel.text = nil
         
-        sliderView.onValueChanged = { value in
+        sliderView.onValueChanged = { [unowned self] value, touched in
             
             self.value = value
             if value >= answerFormat.minimum && value <= answerFormat.maximum {
                 self.continueButtonEnabled = true
-                sliderView.currentValueLabel.text = "\(value)"
+                sliderView.currentValueLabel.text = answerFormat.numberFormatter.string(for: value)
             }
             else {
                 self.continueButtonEnabled = false
@@ -44,6 +42,12 @@ open class RSEnhancedScaleStepViewController: RSQuestionViewController {
         
             sliderView.setNeedsLayout()
             self.contentView.setNeedsLayout()
+      
+            if touched && scaleStep.autoAdvance {
+                RSEnhancedScaleStepViewController.delay(0.25) {
+                    self.goForward()
+                }
+            }
             
         }
         
@@ -63,6 +67,11 @@ open class RSEnhancedScaleStepViewController: RSQuestionViewController {
         
         stackView.addArrangedSubview(sliderView)
         stackView.addArrangedSubview(UIView())
+    }
+    
+    static func delay(_ delay:TimeInterval, closure:@escaping ()->()) {
+        DispatchQueue.main.asyncAfter(
+            deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
     }
     
     override open func validate() -> Bool {

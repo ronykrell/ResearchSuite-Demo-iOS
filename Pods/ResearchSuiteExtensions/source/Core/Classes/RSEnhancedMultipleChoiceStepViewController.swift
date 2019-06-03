@@ -75,6 +75,8 @@ open class RSEnhancedMultipleChoiceStepViewController: RSQuestionTableViewContro
         self.step = step
         self.restorationIdentifier = step!.identifier
         
+        self.adaptor = self.createAdaptor(viewController: self, step: step, result: result)
+        
         self.enhancedMultiChoiceStep = step as! RSEnhancedMultipleChoiceStep
         
         self.initializeCellControllerMap(step: step, result: result)
@@ -110,7 +112,7 @@ open class RSEnhancedMultipleChoiceStepViewController: RSQuestionTableViewContro
         let enhancedMultiWithAccessoryNIB = UINib(nibName: "RSEnhancedMultipleChoiceCell", bundle: Bundle(for: RSEnhancedMultipleChoiceStepViewController.self))
         self.tableView.register(enhancedMultiWithAccessoryNIB, forCellReuseIdentifier: "enhanced_multi_choice")
         
-        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.estimatedRowHeight = 60
         self.tableView.separatorInset = UIEdgeInsets.zero
         
@@ -124,7 +126,7 @@ open class RSEnhancedMultipleChoiceStepViewController: RSQuestionTableViewContro
         self.tableView.allowsMultipleSelection = answerFormat.style == .multipleChoice
         
         self.selected.forEach( { index in
-            self.tableView.selectRow(at: IndexPath(row: index, section: 0), animated: false, scrollPosition: UITableViewScrollPosition.none )
+            self.tableView.selectRow(at: IndexPath(row: index, section: 0), animated: false, scrollPosition: UITableView.ScrollPosition.none )
         })
         
         

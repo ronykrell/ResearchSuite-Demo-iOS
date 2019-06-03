@@ -35,7 +35,7 @@ open class RSLabel: UILabel {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(updateAppearance),
-            name: NSNotification.Name.UIContentSizeCategoryDidChange,
+            name: UIContentSizeCategory.didChangeNotification,
             object: nil
         )
         
@@ -43,8 +43,12 @@ open class RSLabel: UILabel {
         
     }
     
+    open func shouldUpdateAppearance() -> Bool {
+        return self.attributedText == nil
+    }
+    
     @objc open func updateAppearance() {
-        if self.attributedText == nil {
+        if self.shouldUpdateAppearance() {
             self.font = self.defaultFont
             self.invalidateIntrinsicContentSize()
         }
@@ -57,7 +61,7 @@ open class RSLabel: UILabel {
     
     open var defaultFont: UIFont {
         // regular, 14
-        return RSFonts.computeFont(startingTextStyle: UIFontTextStyle.caption1, defaultSize: 12.0, typeAdjustment: 14.0)
+        return RSFonts.computeFont(startingTextStyle: UIFont.TextStyle.caption1, defaultSize: 12.0, typeAdjustment: 14.0)
     }
     
 }

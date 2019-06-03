@@ -1,27 +1,28 @@
 PODS:
-  - Alamofire (4.7.3)
-  - Gloss (2.0.1)
-  - GRMustache.swift (2.1.2)
-  - LS2SDK (0.11.0):
-    - LS2SDK/Common (= 0.11.0)
-    - LS2SDK/Core (= 0.11.0)
-    - LS2SDK/RKSupport (= 0.11.0)
-    - LS2SDK/RSRPSupport (= 0.11.0)
-    - LS2SDK/RSTBSupport (= 0.11.0)
-  - LS2SDK/Common (0.11.0):
+  - Alamofire (4.8.2)
+  - GiphyCoreSDK (1.4.2)
+  - Gloss (2.1.1)
+  - GRMustache.swift (4.0.0)
+  - LS2SDK (0.12.0):
+    - LS2SDK/Common (= 0.12.0)
+    - LS2SDK/Core (= 0.12.0)
+    - LS2SDK/RKSupport (= 0.12.0)
+    - LS2SDK/RSRPSupport (= 0.12.0)
+    - LS2SDK/RSTBSupport (= 0.12.0)
+  - LS2SDK/Common (0.12.0):
     - Gloss (~> 2.0)
-  - LS2SDK/Core (0.11.0):
+  - LS2SDK/Core (0.12.0):
     - Alamofire (~> 4)
     - Gloss (~> 2.0)
     - LS2SDK/Common
     - ResearchSuiteExtensions (~> 0.17)
-  - LS2SDK/RKSupport (0.11.0):
+  - LS2SDK/RKSupport (0.12.0):
     - LS2SDK/Core
     - ResearchKit (~> 1.5)
-  - LS2SDK/RSRPSupport (0.11.0):
+  - LS2SDK/RSRPSupport (0.12.0):
     - LS2SDK/Core
     - ResearchSuiteResultsProcessor (~> 0.9)
-  - LS2SDK/RSTBSupport (0.11.0):
+  - LS2SDK/RSTBSupport (0.12.0):
     - LS2SDK/Core
     - LS2SDK/RKSupport
     - ResearchSuiteTaskBuilder (~> 0.12)
@@ -34,22 +35,23 @@ PODS:
     - ResearchSuiteResultsProcessor (~> 0.9)
     - ResearchSuiteTaskBuilder (~> 0.10)
     - ReSwift (~> 3.0)
-  - ResearchSuiteExtensions (0.20.0):
-    - ResearchSuiteExtensions/Common (= 0.20.0)
-    - ResearchSuiteExtensions/Core (= 0.20.0)
-    - ResearchSuiteExtensions/RSTBSupport (= 0.20.0)
-  - ResearchSuiteExtensions/Common (0.20.0):
+  - ResearchSuiteExtensions (0.25.0):
+    - ResearchSuiteExtensions/Common (= 0.25.0)
+    - ResearchSuiteExtensions/Core (= 0.25.0)
+    - ResearchSuiteExtensions/RSTBSupport (= 0.25.0)
+  - ResearchSuiteExtensions/Common (0.25.0):
     - Gloss (~> 2.0)
     - ResearchKit (~> 1.4)
     - SecureQueue (~> 0.2)
-  - ResearchSuiteExtensions/Core (0.20.0):
+  - ResearchSuiteExtensions/Core (0.25.0):
+    - GiphyCoreSDK
     - ResearchKit (~> 1.4)
     - ResearchSuiteExtensions/Common
     - SnapKit
-    - SwiftyGif (~> 4.1.0)
-  - ResearchSuiteExtensions/RSTBSupport (0.20.0):
+    - SwiftyGif (~> 4.2)
+  - ResearchSuiteExtensions/RSTBSupport (0.25.0):
     - Gloss (~> 2.0)
-    - GRMustache.swift (~> 2.1)
+    - GRMustache.swift (~> 4.0)
     - ResearchSuiteExtensions/Core
     - ResearchSuiteTaskBuilder (~> 0.13)
     - SwiftyMarkdown (~> 0.3)
@@ -58,7 +60,7 @@ PODS:
   - ResearchSuiteResultsProcessor/Core (0.9.2):
     - Gloss (~> 2.0)
     - ResearchKit (~> 1.3)
-  - ResearchSuiteTaskBuilder (0.13.0):
+  - ResearchSuiteTaskBuilder (0.13.1):
     - Gloss (~> 2.0)
     - ResearchKit (~> 1.3)
   - ReSwift (3.0.0)
@@ -106,8 +108,8 @@ PODS:
     - ResearchSuiteTaskBuilder (~> 0.4)
     - sdlrkx/VSR
   - SecureQueue (0.2.0)
-  - SnapKit (4.2.0)
-  - SwiftyGif (4.1.0)
+  - SnapKit (5.0.0)
+  - SwiftyGif (4.2.0)
   - SwiftyMarkdown (0.6.0)
 
 DEPENDENCIES:
@@ -122,6 +124,7 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
+    - GiphyCoreSDK
     - Gloss
     - ResearchKit
     - ReSwift
@@ -149,22 +152,23 @@ CHECKOUT OPTIONS:
     :git: https://github.com/ResearchSuite/ResearchSuiteAppFramework-iOS
 
 SPEC CHECKSUMS:
-  Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
-  Gloss: 1e8743f8de1fbe14a97f220ff901cba91ae5f8f8
-  GRMustache.swift: e21e1ce1d4338f76df3df7673fe2e3ee96eda7f3
-  LS2SDK: b3d6d5f376984afaf633d32d60a31f7da89cb21e
+  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
+  GiphyCoreSDK: 1a89e03e55dc6b636b9d40fde76107867dbb9da5
+  Gloss: 9df15229b2f6484c14752a738474fd2528b4c5cd
+  GRMustache.swift: 1fa0e7d408fcf4fcbcb29adeb18e12ed99521e44
+  LS2SDK: d5c369cbe2df0d12bdf7d43014cb3a6620a275be
   ResearchKit: a5770681dd61afddd3d1f24d232b9abf00cba454
   ResearchSuiteAppFramework: d381b86316a02b76db0f3238abefb988d8727d1c
-  ResearchSuiteExtensions: 559b62a7e94e272716f7b13f34957c72447e416a
+  ResearchSuiteExtensions: 53db196d1b1611217cbcd6b9bfbb8f297aa9d697
   ResearchSuiteResultsProcessor: 7ff5dc6d10da819910ba89eeb544288432756525
-  ResearchSuiteTaskBuilder: 6d0a60b2b4990a0f6c2e91ee58b397438e788858
+  ResearchSuiteTaskBuilder: 072ae890258d5ad53a3cf47fe590e480d2e7d01b
   ReSwift: f0255f4b4f2dacd12c5d97d34d13fc5dad6d6371
   sdlrkx: bb605e90d6e74db30c1ea5f3534bf2ac6a9b0809
   SecureQueue: 21d7c63fc9369e6706aaef0290cb6fec5d2e9615
-  SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
-  SwiftyGif: d36c6dfb52e2ca1e48fe349d225f50ec4123ec85
+  SnapKit: fd22d10eb9aff484d79a8724eab922c1ddf89bcf
+  SwiftyGif: a149bf84df23370592f3f075561ae02c8632a314
   SwiftyMarkdown: 698fe6b283dddac69747f4e08ed0d067c18e0356
 
-PODFILE CHECKSUM: 4a37355f1e3a90dd9bb8a4caf1608e4efed4bd88
+PODFILE CHECKSUM: d4f985d785232abf5d86624982eb23731dcf70e1
 
-COCOAPODS: 1.6.0.beta.2
+COCOAPODS: 1.7.1

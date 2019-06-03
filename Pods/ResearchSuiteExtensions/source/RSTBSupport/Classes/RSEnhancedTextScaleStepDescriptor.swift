@@ -21,6 +21,10 @@ open class RSEnhancedTextScaleStepDescriptor: RSTBTextScaleStepDescriptor {
     public let neutralValueDescription: String?
     public let maximumValueDescription: String?
     
+    public let valueLabelHeight: Int?
+    
+    public let autoAdvance: Bool
+    
     public required init?(json: JSON) {
         
         self.minimumValueLabel = "minimum_value_label" <~~ json
@@ -29,8 +33,12 @@ open class RSEnhancedTextScaleStepDescriptor: RSTBTextScaleStepDescriptor {
         self.neutralValueDescription = "neutral_value_description" <~~ json
         self.maximumValueDescription = "maximum_value_description" <~~ json
         
+        self.valueLabelHeight = "valueLabelHeight" <~~ json
+        
         self.formattedTitle = "formattedTitle" <~~ json
         self.formattedText = "formattedText" <~~ json
+        
+        self.autoAdvance = "autoAdvance" <~~ json ?? false
         
         super.init(json: json)
         

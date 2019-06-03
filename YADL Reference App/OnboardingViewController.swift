@@ -200,7 +200,7 @@ class OnboardingViewController: UIViewController {
                 if(item.identifier == "demographics"){
                     self!.locationAssessmentItem = AppDelegate.loadScheduleItem(filename: "LocationSurvey.json")
                     self?.launchActivity(forItem: (self?.locationAssessmentItem)!)
-                    
+    
                 }
                 else {
                     let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)

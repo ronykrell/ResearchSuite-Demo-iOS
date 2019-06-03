@@ -47,7 +47,19 @@ open class RSEnhancedScaleStepGenerator: RSTBBaseStepGenerator, RSTBAnswerFormat
             return nil
         }
 
-        return RSEnhancedScaleAnswerFormat(
+        let numberFormatter: NumberFormatter? = {
+            if stepDescriptor.percentage {
+                let numberFormatter = NumberFormatter()
+                numberFormatter.numberStyle = .percent
+                numberFormatter.multiplier = 1.0
+                return numberFormatter
+            }
+            else {
+                return nil
+            }
+        }()
+        
+        let answerFormat = RSEnhancedScaleAnswerFormat(
             maximumValue: stepDescriptor.maximumValue,
             minimumValue: stepDescriptor.minimumValue,
             defaultValue: stepDescriptor.defaultValue,
@@ -57,8 +69,11 @@ open class RSEnhancedScaleStepGenerator: RSTBBaseStepGenerator, RSTBAnswerFormat
             minValueLabel: helper.localizationHelper.localizedString(stepDescriptor.minimumValueLabel),
             maximumValueDescription: helper.localizationHelper.localizedString(stepDescriptor.maximumValueDescription),
             neutralValueDescription: helper.localizationHelper.localizedString(stepDescriptor.neutralValueDescription),
-            minimumValueDescription: helper.localizationHelper.localizedString(stepDescriptor.minimumValueDescription)
+            minimumValueDescription: helper.localizationHelper.localizedString(stepDescriptor.minimumValueDescription),
+            numberFormatter: numberFormatter
         )
+        
+        return answerFormat
         
     }
     
@@ -70,7 +85,7 @@ open class RSEnhancedScaleStepGenerator: RSTBBaseStepGenerator, RSTBAnswerFormat
         
         let identifier = "\(identifierPrefix).\(stepDescriptor.identifier)"
         
-        let step = RSEnhancedScaleStep(identifier: identifier, answerFormat: answerFormat)
+        let step = RSEnhancedScaleStep(identifier: identifier, answerFormat: answerFormat, autoAdvance: stepDescriptor.autoAdvance)
         step.title = helper.localizationHelper.localizedString(stepDescriptor.title)
         step.text = helper.localizationHelper.localizedString(stepDescriptor.text)
         

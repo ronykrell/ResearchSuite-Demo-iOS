@@ -15,5 +15,22 @@
                         }
                         ]
     },
-    "resultTransforms": []
+    "resultTransforms": [ {
+        "identifier":"auto",
+        "transform":"auto",
+        "inputMapping":[
+            {
+                "parameter":"schema",
+                "constant":{
+                    "namespace":"Cornell",
+                    "name":"rs-survey",
+                    "version":"1.0.0"
+                }
+            },
+            {
+                "stepIdentifierRegex":"location_onboarding",
+                "parameter":"results"
+            }
+        ]
+    }]
 }
